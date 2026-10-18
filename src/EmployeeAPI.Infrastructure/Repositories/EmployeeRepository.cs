@@ -15,12 +15,12 @@ public class EmployeeRepository : IEmployeeRepository
 
     public async Task<IEnumerable<Employee>> GetAllAsync()
     {
-        return _dbContext.Employees.ToList();
+        return await Task.FromResult(_dbContext.Employees.ToList());
     }
 
     public async Task<Employee?> GetByIdAsync(int id)
     {
-        return _dbContext.Employees.FirstOrDefault(e => e.Id == id);
+        return await Task.FromResult(_dbContext.Employees.FirstOrDefault(e => e.Id == id));
     }
 
     public async Task<Employee> CreateAsync(Employee employee)
@@ -60,6 +60,36 @@ public class WorkdayRepository : IWorkdayRepository
 
     public async Task<IEnumerable<Workday>> GetByEmployeeIdAsync(int id)
     {
-        return _dbContext.Workdays.Where(w => w.EmployeeId == id).ToList();
+        return await Task.FromResult(_dbContext.Workdays.Where(w => w.EmployeeId == id).ToList());
+    }
+
+    public async Task<Workday?> GetByIdAsync(int id)
+    {
+        return await Task.FromResult(_dbContext.Workdays.FirstOrDefault(w => w.Id == id));
+    }
+
+    public async Task<Workday> CreateAsync(Workday workday)
+    {
+        _dbContext.Workdays.Add(workday);
+        await _dbContext.SaveChangesAsync();
+        return workday;
+    }
+
+    public async Task<bool> UpdateAsync(Workday workday)
+    {
+        _dbContext.Workdays.Update(workday);
+        await _dbContext.SaveChangesAsync();
+        return true;
+    }
+
+    public async Task<bool> DeleteAsync(int id)
+    {
+        var workday = _dbContext.Workdays.FirstOrDefault(w => w.Id == id);
+        if (workday == null)
+            return false;
+
+        _dbContext.Workdays.Remove(workday);
+        await _dbContext.SaveChangesAsync();
+        return true;
     }
 }
