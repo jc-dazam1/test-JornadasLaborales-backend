@@ -31,3 +31,24 @@ public class EmployeeWorkdaysDto
     public string EmployeeName { get; set; } = string.Empty;
     public List<DateTime> Workdays { get; set; } = new();
 }
+
+public class WorkdayDto
+{
+    public int Id { get; set; }
+    public int EmployeeId { get; set; }
+    public DateTime Date { get; set; }
+    public decimal HoursWorked { get; set; }
+}
+
+public class CreateWorkdayDto
+{
+    public int EmployeeId { get; set; }
+    public DateTime Date { get; set; }
+    public decimal HoursWorked { get; set; }
+}
+
+public class UpdateWorkdayDto
+{
+    public DateTime? Date { get; set; }
+    public decimal? HoursWorked { get; set; }
+}
