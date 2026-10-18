@@ -14,4 +14,8 @@ public interface IEmployeeRepository
 public interface IWorkdayRepository
 {
     Task<IEnumerable<Workday>> GetByEmployeeIdAsync(int id);
+    Task<Workday?> GetByIdAsync(int id);
+    Task<Workday> CreateAsync(Workday workday);
+    Task<bool> UpdateAsync(Workday workday);
+    Task<bool> DeleteAsync(int id);
 }

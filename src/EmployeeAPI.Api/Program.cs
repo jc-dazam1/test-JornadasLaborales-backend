@@ -20,8 +20,17 @@ builder.Services.AddScoped<IWorkdayRepository, WorkdayRepository>();
 
 // Register Application Services
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+builder.Services.AddScoped<IWorkdayService, WorkdayService>();
 
 var app = builder.Build();
+
+// Apply migrations and seed data
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<EmployeeDbContext>();
+    dbContext.Database.Migrate();
+    DbContextSeed.Initialize(dbContext);
+}
 
 if (app.Environment.IsDevelopment())
 {
