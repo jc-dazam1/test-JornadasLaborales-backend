@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  employeeapi:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: employeeapi
+    ports:
+      - "5001:80"
+      - "5002:443"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Data Source=/app/data/employees.db
+    volumes:
+      - ./data:/app/data
+    networks:
+      - employeeapi-network
+
+networks:
+  employeeapi-network:
+    driver: bridge

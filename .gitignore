@@ -55,3 +55,79 @@ CodeCoverage/
 *.VisualState.xml
 TestResult.xml
 nunit-*.xml
+
+# Visual Studio IDE
+.vs/
+.vscode/
+.idea/
+
+# Rider
+.idea/**
+*.sln.iml
+
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Local History for Visual Studio
+.localhistory/
+
+# BeatPulse healthcheck temp database 
+healthchecksdb
+
+# Backup & swap files
+*.swp
+*.swo
+*.bak
+*.tmp
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Entity Framework
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+
+# appsettings
+appsettings.*.json
+!appsettings.json
+!appsettings.Development.json
+
+# Environment files
+.env.local
+.env.*.local
+
+# Build artifacts
+publish/
+PublishProfiles/
+
+# Testing
+.coverage
+
+# Temporary files
+tmp/
+temp/
+*.temp
+
+# SSL certificates
+*.pfx
+*.pem
+*.key
+*.crt
+
+# User secrets
+secrets.json
+user-secrets.json
+
+# Package management
+packages.lock.json
+
+# IDE configuration
+.editorconfig
