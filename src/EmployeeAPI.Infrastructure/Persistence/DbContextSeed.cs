@@ -6,7 +6,7 @@ public static class DbContextSeed
 {
     public static void Initialize(EmployeeDbContext context)
     {
-        // Verificar si ya existen datos
+        // Don't add seed data if it already exists
         if (context.Employees.Any())
             return;
 
