@@ -10,9 +10,10 @@ services:
       - "5000:5000"
       - "5001:5001"
     environment:
-      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:5000
       - ConnectionStrings__DefaultConnection=Data Source=/app/data/employees.db
+      - ASPNETCORE_HTTPS_PORT=5001
     volumes:
       - employeeapi_data:/app/data
     networks:
