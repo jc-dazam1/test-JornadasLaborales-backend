@@ -1,5 +1,6 @@
-# Usar imagen base de .NET SDK para construir la aplicación
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+# Stage 1: Build
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
+
 WORKDIR /src
 
 # Copiar archivos de proyecto
@@ -15,21 +16,33 @@ RUN dotnet restore "src/EmployeeAPI.Api/EmployeeAPI.Api.csproj"
 COPY . .
 
 # Construir la aplicación
-WORKDIR "/src/src/EmployeeAPI.Api"
-RUN dotnet build "EmployeeAPI.Api.csproj" -c Release -o /app/build
+RUN dotnet build "src/EmployeeAPI.Api/EmployeeAPI.Api.csproj" -c Release -o /app/build
 
 # Publicar la aplicación
-FROM build AS publish
-RUN dotnet publish "EmployeeAPI.Api.csproj" -c Release -o /app/publish
+RUN dotnet publish "src/EmployeeAPI.Api/EmployeeAPI.Api.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
-# Usar imagen base de .NET Runtime para ejecutar
-FROM mcr.microsoft.com/dotnet/aspnet:8.0
+# Stage 2: Runtime
+FROM mcr.microsoft.com/dotnet/aspnet:10.0
+
 WORKDIR /app
-COPY --from=publish /app/publish .
 
-# Exponer puerto
-EXPOSE 80
-EXPOSE 443
+# Copiar aplicación publicada desde la etapa de build
+COPY --from=build /app/publish .
 
-# Establecer punto de entrada
+# Crear directorio para base de datos SQLite
+RUN mkdir -p /app/data
+
+# Exponer puertos
+EXPOSE 5000
+EXPOSE 5001
+
+# Variables de entorno
+ENV ASPNETCORE_URLS=http://+:5000
+ENV ASPNETCORE_ENVIRONMENT=Production
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+    CMD dotnet --version || exit 1
+
+# Punto de entrada
 ENTRYPOINT ["dotnet", "EmployeeAPI.Api.dll"]

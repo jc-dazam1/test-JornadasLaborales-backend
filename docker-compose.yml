@@ -7,16 +7,27 @@ services:
       dockerfile: Dockerfile
     container_name: employeeapi
     ports:
-      - "5001:80"
-      - "5002:443"
+      - "5000:5000"
+      - "5001:5001"
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:5000
       - ConnectionStrings__DefaultConnection=Data Source=/app/data/employees.db
     volumes:
-      - ./data:/app/data
+      - employeeapi_data:/app/data
     networks:
-      - employeeapi-network
+      - employeeapi_network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:5000/api/employees || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+volumes:
+  employeeapi_data:
+    driver: local
 
 networks:
-  employeeapi-network:
+  employeeapi_network:
     driver: bridge
